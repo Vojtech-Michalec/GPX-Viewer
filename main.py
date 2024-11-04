@@ -4,8 +4,6 @@ import os
 import json
 from datetime import datetime
 from collections import defaultdict
-from dotenv import load_dotenv
-from ftplib import FTP
 
 # Funkce pro načtení GPX souborů a filtrování podle data
 def load_gpx_files(directory):
@@ -669,26 +667,3 @@ window.filterRoutes = function() {{
 # Uložení upraveného HTML souboru
 with open('mapa.html', 'w', encoding='utf-8') as file:
     file.write(content)
-
-load_dotenv(dotenv_path='FTP.env')
-ftp_password = os.getenv('FTP_PASSWORD')
-ftp_user = os.getenv('FTP_USER')
-ftp_host = os.getenv('FTP_HOST')
-try:
-    print("Připojování k serveru...")
-    ftp = FTP(ftp_host)
-    ftp.login(user= ftp_user, passwd= ftp_password)
-    print("Připojení k serveru bylo úspěšné.")
-
-    # Odeslání souboru do specifikované cesty na vzdáleném serveru
-    local_file_path = 'mapa.html'
-    remote_file_path = '/www/mapa.html'
-    with open(local_file_path, 'rb') as file:
-        ftp.storbinary(f'STOR {remote_file_path}', file)
-    print(f"Soubor {local_file_path} byl úspěšně nahrán na {remote_file_path}.")
-
-    # Zavření FTP spojení
-    ftp.quit()
-    print("Spojení bylo úspěšně uzavřeno.")
-except Exception as e:
-    print(f"Došlo k chybě: {e}")
